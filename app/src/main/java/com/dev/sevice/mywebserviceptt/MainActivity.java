@@ -7,18 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.Xml;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.XML;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -30,8 +25,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,7 +32,10 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+
+//import org.json.JSONException;
+//import org.json.JSONObject;
+//import org.json.XML;
 
 /**
  * Created by admin on 11/28/2017 AD.
@@ -50,7 +46,7 @@ public class MainActivity extends AppCompatActivity{
     private ArrayAdapter<String> AdapterXML;
     private ArrayList<String> ListitemXML = new ArrayList<String>();
     private Button btn_callservice;
-    private TextView txt_date;
+    private TextView txt_date,txt_price_ngv;
     private ImageView img_search;
     private static String URL = "http://www.pttplc.com/webservice/pttinfo.asmx";//" http://www.pttplc.com/pttinfo.asmx ";
     private static String NAMESPACE = "http://www.pttplc.com/ptt_webservice/";
@@ -65,7 +61,6 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dateController = new DateController();
-        btn_callservice = (Button)findViewById(R.id.btn_callservice);
         txt_date = (TextView)findViewById(R.id.txt_date);
         img_search = (ImageView)findViewById(R.id.img_search);
         recycler_view = (RecyclerView)findViewById(R.id.recycler_view);
@@ -177,21 +172,26 @@ public class MainActivity extends AppCompatActivity{
                 element.normalize();
 
                 NodeList nList = doc.getElementsByTagName("DataAccess");
-
+                TblData dataNGV = new TblData();
                 for (int i=0; i<nList.getLength(); i++) {
                     Node node = nList.item(i);
                     if (node.getNodeType() == Node.ELEMENT_NODE) {
                         Element element2 = (Element) node;
-                        if(!getValue("PRICE", element2).equalsIgnoreCase("")){
+                        if(getValue("PRODUCT", element2).equalsIgnoreCase("NGV")){
+                            dataNGV.setProduct(getValue("PRODUCT", element2));
+                            dataNGV.setPrice(getValue("PRICE", element2));
+                            dataNGV.setGroup("บาท/กิโลกรัม");
+                        }else if(!getValue("PRICE", element2).equalsIgnoreCase("")){
                             TblData tblData = new TblData();
                             tblData.setProduct(getValue("PRODUCT", element2));
                             tblData.setPrice(getValue("PRICE", element2));
+                            dataNGV.setGroup("บาท/ลิตร");
                             dataList.add(tblData);
                             //ListitemXML.add(getValue("PRODUCT", element2)+ "  " + getValue("PRICE", element2));
                         }
                     }
                 }
-
+                dataList.add(dataNGV);
                 Listing();
             }
 

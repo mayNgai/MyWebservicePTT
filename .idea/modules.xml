@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MyWebservicePTT.iml" filepath="$PROJECT_DIR$/MyWebservicePTT.iml" />
+      <module fileurl="file://C:\Users\may\Desktop\new\MyWebservicePTT\MyWebservicePTT.iml" filepath="C:\Users\may\Desktop\new\MyWebservicePTT\MyWebservicePTT.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\may\Desktop\new\MyWebservicePTT\app\app.iml" filepath="C:\Users\may\Desktop\new\MyWebservicePTT\app\app.iml" />
     </modules>
   </component>
 </project>
