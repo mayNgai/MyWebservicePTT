@@ -3,7 +3,6 @@ package com.dev.sevice.mywebserviceptt;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +16,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity{
     private List<TblData> dataList;
     private DateController dateController;
     private static String strDay = "", strMonth = "", strYear = "";
+    private AdView mAdView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +87,10 @@ public class MainActivity extends AppCompatActivity{
                 setDatePicker(txt_date);
             }
         });
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+        mAdView.loadAd(adRequest);
     }
 
     private void setDatePicker(final TextView editText) {
@@ -92,6 +99,10 @@ public class MainActivity extends AppCompatActivity{
         int mYear = c.get(Calendar.YEAR);
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
+
+        String strDate = (mYear - 1) + "-" + (mMonth + 1) + "-" + mDay;
+        long longDate = dateController.dateFormat2Tolong(strDate);
+        Log.i("date",String.valueOf(longDate));
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -114,6 +125,7 @@ public class MainActivity extends AppCompatActivity{
                 GetResponseXML();
             }
         }, mYear, mMonth, mDay);
+        //datePickerDialog.getDatePicker().setMinDate(longDate);
         datePickerDialog.show();
     }
 
